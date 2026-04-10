@@ -38,13 +38,58 @@
         border-radius: 999px;
         background: rgba(255,255,255,0.08);
       }
+      button {
+        margin-top: 1.5rem;
+        padding: 0.85rem 1.2rem;
+        border: 0;
+        border-radius: 0.8rem;
+        background: #38bdf8;
+        color: #082f49;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button:hover {
+        filter: brightness(1.05);
+      }
+      #result {
+        margin-top: 1rem;
+        min-height: 1.5rem;
+        font-size: 1rem;
+        opacity: 0.95;
+      }
     </style>
   </head>
   <body>
     <main>
-      <h1>GitHub Pages test</h1>
-      <p>This page was created and published automatically from OpenClaw.</p>
-      <div class="pill">If you can read this, the test worked.</div>
+      <h1>Frontend + API test</h1>
+      <p>Press the button to call the backend route and display its response.</p>
+      <div class="pill">Vercel frontend talking to FastAPI backend</div>
+      <div>
+        <button id="call-api">Call API</button>
+      </div>
+      <div id="result">No response yet.</div>
     </main>
+
+    <script>
+      const button = document.getElementById('call-api');
+      const result = document.getElementById('result');
+
+      button.addEventListener('click', async () => {
+        result.textContent = 'Loading...';
+
+        try {
+          const response = await fetch('/api/message');
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+          result.textContent = data.message;
+        } catch (error) {
+          result.textContent = `Request failed: ${error.message}`;
+        }
+      });
+    </script>
   </body>
 </html>
